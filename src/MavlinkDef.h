@@ -25,12 +25,14 @@
 //#include "../lib/mavlink_1.0_C_v2.0/mavlink_types.h"                // v1.0_v2.0 protocol: mavlink_msg size: 291
 //#include "../lib/mavlink_1.0_C_v2.0/ardupilotmega/mavlink.h"        //
 
-//#include "/home/sam/dronestation/lib/mavlink/include/mavlink/v6.0/mavlink_types.h"                // v1.0_v2.0 protocol: mavlink_msg size: 291
-//#include "/home/sam/dronestation/lib/mavlink/include/mavlink/v6.0/dronebox_messages/mavlink.h"        //
+#include "/home/sam/github/qgroundcontrol/libs/mavlink/include/mavlink/v2.0/mavlink_types.h"
+#include "/home/sam/github/qgroundcontrol/libs/mavlink/include/mavlink/v2.0/ardupilotmega/mavlink.h"
 
-#include "/home/sam/dronestation/lib/mavlink/include/mavlink/mavlink_v7.0/mavlink_types.h"
-// #include "../lib/mavlink/include/mavlink/mavlink_v7.0/dronebox_messages/mavlink.h"
-#include "/home/sam/dronestation/lib/mavlink/include/mavlink/mavlink_v7.0/ardupilotmega/mavlink.h"
+// v0.9_v1.0 protocol: mavlink_msg size: 272
+// v1.0_v1.0 protocol: mavlink_msg size: 272
+
+// v0.9_v2.0 protocol: mavlink_msg size: 291
+// v1.0_v2.0 protocol: mavlink_msg size: 291
 
 // Version v2.0 has a mavlink_message size of 291 bytes
 

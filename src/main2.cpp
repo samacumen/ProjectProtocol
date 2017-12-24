@@ -124,13 +124,6 @@ void comm_udp()
 
         /***********************************************************/
 
-        mavlink_ds_actuator_do_action_t actuator_action;
-        actuator_action.action_type = DS_ACTUATOR_DO_ACTION_TYPE_RAISE_PLATFORM;
-
-        mavlink_msg_ds_actuator_do_action_encode(1, 200, &msg, &actuator_action);
-        len = mavlink_msg_to_send_buffer(buf, &msg);
-        bytes_sent = sendto(sock1, buf, len, 0, (struct sockaddr*)&gcs_snd_Addr, sizeof(struct sockaddr_in));
-
         /***********************************************************/
 
         memset(buf, 0, BUFFER_LENGTH);
@@ -154,20 +147,20 @@ void comm_udp()
 
                     if (msg.msgid == MAVLINK_MSG_ID_HEARTBEAT)
                     {
-                        printf("..\n");
+                        printf("Heartbeat received from QGC..\n");
                     }
-                    if (msg.msgid == MAVLINK_MSG_ID_DS_ACTUATOR_DO_ACTION)
-                    {
-                        mavlink_ds_actuator_do_action_t action;
-                        mavlink_msg_ds_actuator_do_action_decode(&msg, &action);
-                        std::cout << "\nmsg id: "<< msg.msgid << ",action: " << (DS_ACTUATOR_DO_ACTION_TYPE) action.action_type << std::endl;
+//                    if (msg.msgid == MAVLINK_MSG_ID_DS_ACTUATOR_DO_ACTION)
+//                    {
+//                        mavlink_ds_actuator_do_action_t action;
+//                        mavlink_msg_ds_actuator_do_action_decode(&msg, &action);
+//                        std::cout << "\nmsg id: "<< msg.msgid << ",action: " << (DS_ACTUATOR_DO_ACTION_TYPE) action.action_type << std::endl;
 
-                        // Packet received
-                        printf("\nReceived packet: SYS: %d, COMP: %d, LEN: %d, MSG ID: %d", msg.sysid, msg.compid, msg.len, msg.msgid);
-                        printf("\nStatus packet  : Buffer exceed: %d, Drops: %d, Parse err: %d, Success: %d\n", status.buffer_overrun, status.packet_rx_drop_count, status.parse_error, status.packet_rx_success_count);
+//                        // Packet received
+//                        printf("\nReceived packet: SYS: %d, COMP: %d, LEN: %d, MSG ID: %d", msg.sysid, msg.compid, msg.len, msg.msgid);
+//                        printf("\nStatus packet  : Buffer exceed: %d, Drops: %d, Parse err: %d, Success: %d\n", status.buffer_overrun, status.packet_rx_drop_count, status.parse_error, status.packet_rx_success_count);
 
-                        printf("\nRecv from addr: %s, %d",inet_ntoa(gcs_snd_Addr.sin_addr), ntohs(gcs_snd_Addr.sin_port));
-                    }
+//                        printf("\nRecv from addr: %s, %d",inet_ntoa(gcs_snd_Addr.sin_addr), ntohs(gcs_snd_Addr.sin_port));
+//                    }
                 }
             }
             printf("\n");
