@@ -9,5 +9,5 @@ SOURCES += \
     src/main.cpp
 
 HEADERS += \
-    src/MavlinkDef.h \
-    src/remotenode.h
+    src/remotenode.h \
+    src/mavlinkdefinitions.h

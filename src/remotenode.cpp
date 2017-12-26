@@ -6,7 +6,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include "MavlinkDef.h"
+/* Linux / MacOS POSIX timer headers */
+#include "mavlinkdefinitions.h"
 
 /****************** HELPER FUNCTIONS ******************/
 ///
@@ -89,23 +90,21 @@ bool RemoteNode::bindSocket(__CONST_SOCKADDR_ARG __addr, int sock)
     return true;
 }
 
-int RemoteNode::send()
+int RemoteNode::send(MAVMSG msg)
 {
     uint8_t buf[BUFFER_LENGTH];
-    mavlink_message_t msg;
 
-    /* Send Heartbeat to QGC */
-    mavlink_msg_heartbeat_pack(1, 200, &msg, MAV_TYPE_HELICOPTER, MAV_AUTOPILOT_GENERIC, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
     uint32_t len = mavlink_msg_to_send_buffer(buf, &msg);
     int bytes_sent = sendto(sock1, buf, len, 0, (struct sockaddr*)&gcs_snd_Addr, sizeof(struct sockaddr_in));
     return bytes_sent;
 }
 
-void RemoteNode::recv()
+MAVMSG* RemoteNode::recv()
 {
     uint8_t buf[BUFFER_LENGTH], temp;
     ssize_t recsize;
     socklen_t fromlen;
+    MAVMSG* msg = new MAVMSG;
 
     memset(buf, 0, BUFFER_LENGTH);
     recsize = recvfrom(sock1, (void *)buf, BUFFER_LENGTH, 0, (struct sockaddr *)&gcs_snd_Addr, &fromlen);   // auto fills gcs_snd_Addr
@@ -114,7 +113,6 @@ void RemoteNode::recv()
     if (recsize > 0)
     {
         // Something received - print out all bytes and parse packet
-        mavlink_message_t msg;
         mavlink_status_t status;
 
         // printf("Bytes Received: %d\nDatagram: ", (int)recsize);
@@ -122,14 +120,9 @@ void RemoteNode::recv()
         {
             temp = buf[i];
             // printf("%02x ", (unsigned char)temp);
-            if (mavlink_parse_char(2, buf[i], &msg, &status))
+            if (mavlink_parse_char(2, buf[i], msg, &status))
             {
-                std::cout << "\nmsg id: "<< msg.msgid << std::endl;
-
-                if (msg.msgid == MAVLINK_MSG_ID_HEARTBEAT)
-                {
-                    printf("Heartbeat received from QGC..\n");
-                }
+                return msg;
             }
         }
         printf("\n");
@@ -138,18 +131,20 @@ void RemoteNode::recv()
     msleep(100); // Sleep for 100ms
 }
 
-///
-/// Communicate with remote node via mavlink. This function does two things:
-/// 1) Sends a simple heartbeat to the remote node
-/// 2) Listens to incoming heartbeat from remote node
-///
-void RemoteNode::start_comm()
+void RemoteNode::handlemessage(MAVMSG* msg)
 {
-    setup();
+    std::cout << "\nmsg id: "<< msg->msgid << std::endl;
 
-    for (; ;)
+    if (msg->msgid == MAVLINK_MSG_ID_HEARTBEAT)
     {
-        send();
-        recv();
+        printf("Heartbeat received from QGC..\n");
     }
+}
+
+MAVMSG RemoteNode::pack_hb()
+{
+    MAVMSG msg;
+    /* Pack Heartbeat message */
+    mavlink_msg_heartbeat_pack(1, 200, &msg, MAV_TYPE_HELICOPTER, MAV_AUTOPILOT_GENERIC, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
+    return msg;
 }
