@@ -6,9 +6,9 @@ void start_comm();
 
 int main()
 {
-    // mavlink_message_t msg;
-    //std::cout << " Size is: " << sizeof(msg) << std::endl;
-    //std::cout << " Char bit is: " << CHAR_BIT << std::endl;
+//    mavlink_message_t msg;
+//    std::cout << " Size is: " << sizeof(msg) << std::endl;
+//    std::cout << " Char bit is: " << CHAR_BIT << std::endl;
 
     std::cout << "Starting communication over udp..\n";
     start_comm();
