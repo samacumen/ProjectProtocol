@@ -5,6 +5,8 @@
 
 # Ignore files #
 ################
+mavlink_example.pro
+src/udp_comm
 
 
 # Auto start #
