@@ -5,7 +5,9 @@ CONFIG -= qt
 
 SOURCES += \
     #src/main.cpp \
-    src/main2.cpp
+    src/remotenode.cpp \
+    src/main.cpp
 
 HEADERS += \
-    src/MavlinkDef.h
+    src/MavlinkDef.h \
+    src/remotenode.h
