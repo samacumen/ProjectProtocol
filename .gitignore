@@ -6,6 +6,7 @@
 # Ignore files #
 ################
 mavlink_example.pro
+mavlink_example.pro.user
 src/udp_comm
 
 
